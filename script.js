@@ -9,7 +9,7 @@ menuIcon.addEventListener('click', () => {
     navbar.classList.toggle('active');
 });
 
-const activePage = () => {
+const activePage = (skipSection = false) => {
     const header = document.querySelector('header');
     const barsBox = document.querySelector('.bars-box');
 
@@ -27,9 +27,11 @@ const activePage = () => {
         barsBox.classList.add('active');
     }, 1100);
 
-    sections.forEach(section => {
-        section.classList.remove('active');
-    });
+    if (!skipSection) {
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+    }
 
     menuIcon.classList.remove('bx-x');
     navbar.classList.remove('active');
@@ -37,23 +39,37 @@ const activePage = () => {
 
 navLinks.forEach((link, idx) => {
     link.addEventListener('click', () => {
-        activePage();
+        // Remove active from nav links
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        });
         link.classList.add('active');
 
-        setTimeout(() => {
-            sections[idx].classList.add('active');
-        }, 1100);
+        // Only remove active from sections after the new one is shown
+        sections.forEach((section, sidx) => {
+            if (sidx === idx) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+
+        activePage(true); // Pass a flag to skip section removal in activePage
     });
 });
 
 logoLink.addEventListener('click', () => {
     if (!navLinks[0].classList.contains('active')) {
-        activePage();
+        navLinks.forEach(link => link.classList.remove('active'));
         navLinks[0].classList.add('active');
-
-        setTimeout(() => {
-            sections[0].classList.add('active');
-        }, 1100);
+        sections.forEach((section, sidx) => {
+            if (sidx === 0) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+        activePage(true);
     }
 });
 
