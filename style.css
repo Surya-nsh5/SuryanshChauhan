@@ -1,7 +1,6 @@
-/* Importing Poppins font from Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
-/* Reset and base styles */
+/* Base and Reset Styles */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +11,6 @@
   font-family: "Poppins", sans-serif;
 }
 
-/* CSS variables for theme colors */
 :root {
   --bg-color: #161a20;
   --second-bg-color: #323946;
@@ -27,6 +25,24 @@ html {
 
 body {
   color: var(--white-color);
+}
+
+html,
+body {
+  background: var(--bg-color) !important;
+}
+
+/* Navbar Animation */
+@keyframes slideInNavbar {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 header {
@@ -45,16 +61,9 @@ header {
 }
 
 header.active {
-  animation: show-header 1.5s linear forwards;
-  animation-delay: 1.2s;
-}
-
-@keyframes show-header {
-
-  100% {
-    visibility: visible;
-    opacity: 1;
-  }
+  visibility: visible;
+  opacity: 1;
+  animation: slideInNavbar 0.7s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .logo {
@@ -81,6 +90,7 @@ nav a.active {
   display: none;
 }
 
+/* Animated Bars Background */
 .bars-box {
   position: absolute;
   width: 100%;
@@ -121,6 +131,7 @@ nav a.active {
   }
 }
 
+/* Section Layouts */
 section {
   position: absolute;
   width: 100%;
@@ -131,17 +142,23 @@ section {
   overflow: hidden;
 }
 
-section.active {
-  animation: show-content 1.5s linear forwards;
-  animation-delay: 1.6s;
+@keyframes slideInSection {
+  from {
+    opacity: 0;
+    transform: translateX(100vw);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-@keyframes show-content {
-  100% {
-    visibility: visible;
-    opacity: 1;
-    overflow: auto;
-  }
+section.active {
+  visibility: visible;
+  opacity: 1;
+  overflow: auto;
+  animation: slideInSection 0.7s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .home {
@@ -251,6 +268,7 @@ section.active {
   box-shadow: 0 0 1rem var(--main-color);
 }
 
+/* Profile Image Styling */
 .home-img .img-box {
   position: relative;
   width: 32vw;
@@ -261,26 +279,54 @@ section.active {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 4px 32px 0 rgba(61, 168, 240, 0.10), 0 1.5px 12px 0 rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.4s;
 }
 
-.home-img .img-box::before,
-.home-img .img-box::after {
+.home-img .img-box::before {
   content: '';
   position: absolute;
-  width: 100rem;
-  height: 250rem;
-  background: conic-gradient(transparent, transparent, transparent, var(--main-color));
-  transform: rotate(0deg);
-  animation: rotate-border 10s linear infinite;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 50%;
+  z-index: 0;
+  background: conic-gradient(#3da8f0 0%,
+      #1e90ff 25%,
+      #38f9d7 50%,
+      #3da8f0 75%,
+      #1e90ff 100%);
+  animation: rotateBorder 2.5s linear infinite, pulseGlow 2.5s ease-in-out infinite alternate;
+  filter: blur(0.7px) brightness(1.1);
+  opacity: 0.92;
+  transition: filter 0.4s, opacity 0.4s;
 }
 
-.home-img .img-box::after {
-  animation-delay: -5s;
+.home-img .img-box:hover {
+  box-shadow: 0 8px 48px 0 rgba(61, 168, 240, 0.18), 0 2px 16px 0 rgba(0, 0, 0, 0.22);
 }
 
-@keyframes rotate-border {
+.home-img .img-box:hover::before {
+  filter: blur(1.5px) brightness(1.3);
+  opacity: 1;
+  animation-duration: 1.2s, 1.25s;
+}
+
+@keyframes rotateBorder {
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    filter: blur(0.7px) brightness(1.1);
+  }
+
+  100% {
+    filter: blur(2.2px) brightness(1.25);
   }
 }
 
@@ -316,6 +362,39 @@ section.active {
   color: var(--main-color);
 }
 
+/* Animated Letter Hover Effect */
+.letter {
+  display: inline-block;
+  transition: color 0.3s, transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+  cursor: pointer;
+}
+
+.letter:hover {
+  color: var(--main-color);
+  transform: scale(1.3) translateY(-0.2em) rotate(-8deg);
+  text-shadow: 0 2px 8px var(--main-color);
+  animation: bounceLetter 0.4s;
+}
+
+@keyframes bounceLetter {
+  0% {
+    transform: scale(1.3) translateY(-0.2em) rotate(-8deg);
+  }
+
+  30% {
+    transform: scale(1.1) translateY(-0.4em) rotate(-8deg);
+  }
+
+  60% {
+    transform: scale(1.3) translateY(-0.2em) rotate(-8deg);
+  }
+
+  100% {
+    transform: scale(1.3) translateY(-0.2em) rotate(-8deg);
+  }
+}
+
+/* Resume Section Layouts */
 .resume-container {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -386,6 +465,11 @@ section.active {
   background: var(--main-color);
 }
 
+.resume-list {
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
 .resume-list .resume-item {
   background: var(--second-bg-color);
   border-radius: .8rem;
@@ -394,6 +478,15 @@ section.active {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition:
+    transform 0.4s cubic-bezier(0.77, 0, 0.175, 1),
+    box-shadow 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.12);
+  will-change: transform, box-shadow;
+}
+
+.resume-list .resume-item:hover {
+  transform: scale(1.01) rotateY(3deg) rotateX(1deg);
 }
 
 .resume-item .year {
@@ -421,6 +514,7 @@ section.active {
   margin-left: -2rem;
 }
 
+/* Skills Section Grid */
 .resume-detail.skills .resume-list {
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   height: auto;
@@ -483,7 +577,7 @@ section.active {
   font-size: 1.8rem;
 }
 
-
+/* Portfolio/Project Section */
 .portfolio-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -592,6 +686,18 @@ section.active {
   height: 100%;
   object-fit: cover;
   border-radius: 1rem;
+  transition:
+    transform 0.5s cubic-bezier(0.77, 0, 0.175, 1),
+    box-shadow 0.5s cubic-bezier(0.77, 0, 0.175, 1),
+    filter 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  will-change: transform, box-shadow, filter;
+}
+
+.portfolio-carousel .img-item:hover img {
+  transform: scale(1.07) rotate(-2deg);
+  box-shadow: 0 8px 32px 0 rgba(61, 168, 240, 0.25), 0 1.5px 12px 0 rgba(0, 0, 0, 0.18);
+  filter: brightness(1.08) saturate(1.2) drop-shadow(0 0 12px var(--main-color));
+  border-radius: 1.5rem;
 }
 
 .portfolio-box .navigation {
@@ -619,6 +725,7 @@ section.active {
   margin-left: 1.5rem;
 }
 
+/* Contact Section Layouts */
 .contact-container {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
@@ -704,7 +811,7 @@ section.active {
   cursor: pointer;
 }
 
-/* breakpoints */
+/* Responsive Breakpoints */
 @media screen and (max-width: 1200px) {
   html {
     font-size: 55%;
@@ -827,4 +934,39 @@ section.active {
   .contact-box h2 {
     font-size: 3.5rem;
   }
+}
+
+/* Fade-in Animation for Section Content */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+section .heading,
+section h2,
+section p,
+section .desc {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: none;
+}
+
+section.active .heading {
+  animation: fadeInUp 0.7s 0.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+section.active h2:not(.heading) {
+  animation: fadeInUp 0.7s 0.35s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+section.active .desc,
+section.active p {
+  animation: fadeInUp 0.7s 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
 }
